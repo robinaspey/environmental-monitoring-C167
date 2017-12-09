@@ -11,7 +11,7 @@ This is legacy source code from 2001, so another of my old embedded projects
 
 The files are all Ansi C and include:
 
-1. Project main file (mtf0.c, mtf1.c, mtf2.c, mtf3.c, mtf4.c revisions not under VCS)
+1. Project main file: mtf0.c, mtf1.c, mtf2.c, mtf3.c, mtf4.c (revisions not under VCS)
 2. Flash memory file system file (ff_flash.c)
 3. Drivers for the main program  
 
