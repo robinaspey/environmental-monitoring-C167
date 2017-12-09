@@ -2,11 +2,9 @@
 /* Project:		Merseyside Transport Futures        */
 /* Author:		Robin Aspey (G03)		    */
 /* Version:		1.1 				    */
-/* Date:		8 November 2000			    */	
-/* 							    */
-/*	Skeleton program for C167 uController 		    */ 
+/* Date:		8 November 2001			    */
+/* Skeleton program for C167 uController 		    */ 
 /************************************************************/
-
 #include <reg167.h>
 #include <stdio.h>
 #include <string.h>
