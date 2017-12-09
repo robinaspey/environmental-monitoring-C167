@@ -1,22 +1,21 @@
 /************************************************************/
-/* Project:		Merseyside Transport Futures             	*/
-/* Author:		Robin Aspey (G03)							*/
-/* Date:		16 October 2000								*/	
-/* 															*/
-/*	Skeleton program for C167 uController 					*/ 
+/* Project:		Merseyside Transport Futures        */
+/* Author:		Robin Aspey (G03)		    */
+/* Date:		16 October 2001			    */
+/* Skeleton program for C167 uController 		    */ 
 
 unsigned short t3_count   ; 			// Medium to fast variable in NDATA
 unsigned short idata fvar ; 			// Fast variable in on-chip IRAM
 unsigned short sdata svar ; 			// Fast variable in on-chip XRAM (Not C161 or C164)
 unsigned short big_array[0x80] ; 		// Array that could be up to 64k bytes in size
-unsigned short xhuge vbig_array[0x80] ; // Array that could be up to 16MB bytes in size
-unsigned short *hptr ; 					// A pointer that can point at anything up to 64K in size
+unsigned short xhuge vbig_array[0x80] ; 	// Array that could be up to 16MB bytes in size
+unsigned short *hptr ; 				// A pointer that can point at anything up to 64K in size
 unsigned short xhuge *xptr ; 			// A pointer that can point at anything of any size
 unsigned short bdata flags ; 			// A word variable in the bit-addressible IRAM area on-chip
 sbit flag0 = flags^0 ;       			// A single bit flag located in bit 0 of word "flags"
-bit bflag ; 							// Single bit variable
-										// Constant Declaration For EPROM 
-unsigned short const nconstant = 1 ; 	// Medium to fast constant in EPROM
+bit bflag ; 					// Single bit variable
+						// Constant Declaration For EPROM 
+unsigned short const nconstant = 1 ; 		// Medium to fast constant in EPROM
 
 /************************************************************/
 
@@ -27,15 +26,15 @@ unsigned short const nconstant = 1 ; 	// Medium to fast constant in EPROM
 #include <ctype.h>
 #include <pragmas.h>
 
-#define ESCAPE 	0x1B
+#define ESCAPE 		0x1B
 #define LF		0x0A
 #define CR		0x0D
 #define XON		19
-#define XOFF	17
+#define XOFF		17
 
 #ifdef _LEDS_P2_
-#define LED_port_DP DP2
-#define LED_port    P2
+#define LED_port_DP 	DP2
+#define LED_port    	P2
 #endif
 
 /**************************************/
@@ -60,8 +59,8 @@ char _rx_byte = 0xFF;			// until a key pressed!
 
 unsigned _rx_errors      = 0;
 unsigned _bytes_received = 0;
-unsigned _ticks = 0;
-unsigned _logging = 0;
+unsigned _ticks 	 = 0;
+unsigned _logging 	 = 0;
 
 const char replies[]={ 0x1b, '1','2','3','4','5', '6', CR };	// define valid responses
 char const build_date[]=__DATE__;
@@ -184,28 +183,28 @@ S0CON	= 0x8011;	// set serial mode to async 8,n,1
 void display_message(void)
 {
 printf(	"\nC167 Exhaust Data Logging Card (ROM Vers 1.0)"
-		"\nAuthor: Robin Aspey (build date: %s)\n\n", build_date);
-puts("<ESC> for monitor. Also aborts data logging\n");
+	"\nAuthor: Robin Aspey (build date: %s)\n\n", build_date);
+puts(   "<ESC> for monitor. Also aborts data logging\n");
 }
 
 void initialise(void)
 {
 init_serial_comms(9600);
 
-S0RIC = 0x3F;			// sets up interrupt priorities
-S0RIE = 1;				// use maximum priority for rx data
-IEN   = 1;				// allow timer and serial port to run
+S0RIC = 0x3F;		// sets up interrupt priorities
+S0RIE = 1;		// use maximum priority for rx data
+IEN   = 1;		// allow timer and serial port to run
 LED_port_DP |= 0x0F ; 	// Ports 2.0 - 0.3 are output LEDs   	
-						// Initialise A 1ms Interrupt On GPT1 */
-DP7 |= 0x0F;			// initialise port 7.0 to 7.3 as outputs 
+			// Initialise A 1ms Interrupt On GPT1 */
+DP7 |= 0x0F;		// initialise port 7.0 to 7.3 as outputs 
 T2CON 	= 0x27 ;
 T3CON 	= 0x0007 ;
 T3UD 	= 1 ;                
-T3 = T2 = 2500;			// 2500  is 1 second I think ???
-T3IC 	= 0x04 ;   		// Timer 3 interrupt is priority 1
-T3IE 	= 1    ;   		// Enable Timer 3 interrupt                                   
-T3R 	= 0 ;   		// Disable Global Interrupts until ready to service IRQ 
-IEN 	= 1 ;   		// May be required for debugger
+T3 = T2 = 2500;		// 2500  is 1 second I think ???
+T3IC 	= 0x04 ;   	// Timer 3 interrupt is priority 1
+T3IE 	= 1    ;   	// Enable Timer 3 interrupt                                   
+T3R 	= 0 ;   	// Disable Global Interrupts until ready to service IRQ 
+IEN 	= 1 ;   	// May be required for debugger
 }
    
 void timeout(void)
@@ -218,7 +217,7 @@ while(!_logging)
 	if (_rx_byte == 0x1B) // if ESC key is pressed
 		{ printf("\n%02x or <ESC> trapped.\n\n", _rx_byte); return; }
 	if (dcount <= 0) _logging = 1;
-	else{
+	else	{
 		delay(4);
 		printf("\rTimeout in %02d seconds", dcount--);
 		}
@@ -252,46 +251,46 @@ puts("5. Display setup and hardware information.");
 puts("6. Start data logging.");
 puts("\n<ESC> to return. Re-start data logging.");
 while(!strchr(_rx_byte, replies)) 	
-	{							// sit in loop waiting for keypress
+	{		// sit in loop waiting for keypress
 	switch(_rx_byte)
 		{
 		case 0x31:	
-					puts("\n1. Code for reading ADC"); 	
-					read_rgb_values(); 					
-					break;
+			puts("\n1. Code for reading ADC"); 	
+			read_rgb_values(); 					
+			break;
 		case 0x32:	
-					puts("\n2. Code for flash base"); 	
-//					init_flash();
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\n2. Code for flash base"); 	
+//			init_flash();
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x33:	
-					puts("\n3. Code to dump memory");  	
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\n3. Code to dump memory");  	
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x34: 	
-					puts("\n4. Code for serial output"); 	
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\n4. Code for serial output"); 	
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x35: 	
-					puts("\n5. pressed .. Reading setup information."); 	 	
-					display_cs();	// show chip select info.
-					S0RBUF=0;	
-					_rx_byte=0;	
-					break;
+			puts("\n5. pressed .. Reading setup information."); 	 	
+			display_cs();	// show chip select info.
+			S0RBUF=0;	
+			_rx_byte=0;	
+			break;
 		case 0x36:  
-					puts("\n6. Start data logging");      
-					S0RBUF=0;   
-					_rx_byte=0; 
-					break;
+			puts("\n6. Start data logging");      
+			S0RBUF=0;   
+			_rx_byte=0; 
+			break;
 		case ESCAPE:	
-					display_message();	
-					S0RBUF=0;   
-					_rx_byte=0; 
-					T3R=1;		// enable interrupts on timer counter
-					return;
+			display_message();	
+			S0RBUF=0;   
+			_rx_byte=0; 
+			T3R=1;		// enable interrupts on timer counter
+			return;
 		default: 		
-					S0RBUF=0; 
-					break;
+			S0RBUF=0; 
+			break;
 		} 
 #endif 		//	NOMONITOR
 	}
@@ -301,8 +300,8 @@ void display_cs(void)
 {
 puts("\nChip Select Address MSB (RGSAD) and Block Sizes (RGSZ)");
 puts("(RGSZ uses bits 0 - 3) 0000 = 4k, MUL by two per bit:   ");
-printf("/CS1: 0x%04x /CS2: 0x%04x\n"
-	   "/CS3: 0x%04x /CS4: 0x%04x\n", 
+printf(	"/CS1: 0x%04x /CS2: 0x%04x\n"
+        "/CS3: 0x%04x /CS4: 0x%04x\n", 
 		ADDRSEL1, ADDRSEL2, ADDRSEL3, ADDRSEL4);
 puts("\nBus Control Registers: ");
 printf("BC0: 0x%04x BC1: 0x%04x BC2: 0x%04x\n" 
@@ -314,9 +313,9 @@ printf("\nSystem control SYSCON: 0x%04x", SYSCON);
 void setup_flash_base(void)
 {
 ADDRSEL3=0x0807;	// sets flash start address to 
-					// 0x8000 and block size 512K Byte
+			// 0x8000 and block size 512K Byte
 BUSCON3=0xFFC3;		// /CS dependant on /RD and /WR lines 
-					// wait states set with ALE lengthened
+			// wait states set with ALE lengthened
 }
 
 
