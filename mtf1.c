@@ -1,9 +1,8 @@
 /************************************************************/
-/* Project:		Merseyside Transport Futures             	*/
-/* Author:		Robin Aspey (G03)							*/
-/* Date:		16 October 2000								*/	
-/* 															*/
-/*	Skeleton program for C167 uController 					*/ 
+/* Project:		Merseyside Transport Futures        */
+/* Author:		Robin Aspey (G03)		    */
+/* Date:		16 October 2000			    */
+/*	Skeleton program for C167 uController 		    */ 
 /************************************************************/
 
 #include <reg167.h>
@@ -16,21 +15,19 @@
 #include <intrins.h>
 
 #define ESCAPE 		0x1B
-#define LF			0x0A
-#define CR			0x0D
-#define DEL			0x7F
+#define LF		0x0A
+#define CR		0x0D
+#define DEL		0x7F
 #define CNTLQ		0x11
 #define CNTLS		0x13
 #define BACKSPACE	0x08
-#define XON			19
+#define XON		19
 #define XOFF		17
-#define LED_port_DP DP2
-#define LED_port    P2
-
+#define LED_port_DP 	DP2
+#define LED_port    	P2
 /**************************************/
 /* Data Logging Main Program          */
 /**************************************/
-
 void initialise(void);
 void display_message(void);
 void display_cs(void);
@@ -44,14 +41,14 @@ void timeout(void);
 void delay(int);
 
 unsigned read_adc(int);
-
 // Variables placed in NDATA
 
-unsigned short _bytes_received = 0;
-unsigned short _ticks = 0;
-unsigned short _logging = 0;
+unsigned short _bytes_received  = 0;
+unsigned short _ticks 		= 0;
+unsigned short _logging 	= 0;
 
-char const replies[]={ 0x1b, '1','2','3','4','5', '6', CR };	// define valid responses
+char const replies[]={ 0x1b, '1','2','3','4','5', '6', CR };	
+						// define valid responses
 char const build_date[]=__DATE__;
 char const build_time[]=__TIME__;
 
@@ -64,13 +61,12 @@ extern char _getserialkey(void);
 
 void display_string(unsigned address)
 {
-unsigned short xhuge *ptr;					// placed in NDATA
+unsigned short xhuge *ptr;			// placed in NDATA
 char buffer[64];
 ptr=(unsigned short xhuge *)address;		// set to base address of flash
 memcpy(buffer, (char *)ptr, 64);
 printf("\n -> %16s\n <-", buffer);
 }
-
 
 void prompt(void)
 {
@@ -115,7 +111,7 @@ while(counter > 0)
 	} printf("\n<ESC> for menu or <7> to continue.");
 }
 
-char _rx_byte = 0xFF;			// until a key pressed!
+char _rx_byte = 0xFF;	// until a key pressed!
 
 void read_rgb_values(void)
 {
@@ -125,12 +121,12 @@ for (j=0; j <= 10; j++)
 	for (i=0; i <= 4; i++)
 		{
 		read_adc(i);
-		}	printf("\nADC values r: %d g: %d b: %d", vadc[0], vadc[1], vadc[2]);
+		}	
+	printf("\nADC values r: %d g: %d b: %d", vadc[0], vadc[1], vadc[2]);
 	}
 	puts("\n<ESC> for menu or <1> to continue.");
 	_rx_byte = 0;
 }
-
 
 unsigned read_adc(int channel)
 {
@@ -139,7 +135,6 @@ ADST  = 1;
 while(ADBSY){ ; }
 return(ADDAT & 0x03ff);
 }
-
 
 void rx_handler(void) interrupt 0x2B using RXREGS
 {
@@ -156,7 +151,7 @@ S0REN=1;		// restart async comms
 void status_interrupt(void) interrupt 0x23 
 {
 if (!_logging)	_ticks++;
-LED_port ^= 0x01 ; 		// Flash LED #2.0 as status indicator
+LED_port ^= 0x01 ; 	// Flash LED #2.0 as status indicator
 P7^= 0x01;
 if (isalnum(_rx_byte) && strchr(replies, _rx_byte))
 	{
@@ -165,45 +160,42 @@ if (isalnum(_rx_byte) && strchr(replies, _rx_byte))
 	}
 }
 
-
 void init_serial_comms(void)
 {
-P3 	   |= 0x400;	// set port 3.10 to TXD
-DP3    |= 0x400;	// set direction control to output
-DP3	   &= 0xF7FF;	// reset port 3.11 direction control for RXD
+P3 	|= 0x400;	// set port 3.10 to TXD
+DP3     |= 0x400;	// set direction control to output
+DP3	&= 0xF7FF;	// reset port 3.11 direction control for RXD
 S0TIC	= 0x80;		// set transmit interrupt flag
 S0RIC	= 0x00;		// delete receive interrupt flag
 S0BG 	= 0x40;		// 9600 baud
 S0CON	= 0x8011;	// set serial mode to async 8,n,1
 }
 	
-
 void display_message(void)
 {
 printf(	"\nC167 Exhaust Data Logging Card (ROM Vers 1.0)"
-		"\nAuthor: Robin Aspey (build date: %s)\n\n"
+	"\nAuthor: Robin Aspey (build date: %s)\n\n"
         "<ESC> for monitor. (Abort data logging)\n", build_date);
 }
-
 
 void initialise(void)
 {
 init_serial_comms();
 
-S0RIC = 0x3F;			// sets up interrupt priorities
-S0RIE = 1;				// use maximum priority for rx data
-IEN   = 1;				// allow timer and serial port to run
+S0RIC = 0x3F;		// sets up interrupt priorities
+S0RIE = 1;		// use maximum priority for rx data
+IEN   = 1;		// allow timer and serial port to run
 LED_port_DP |= 0x0F ; 	// Ports 2.0 - 0.3 are output LEDs   	
-						// Initialise A 1ms Interrupt On GPT1 */
-DP7 |= 0x0F;			// initialise port 7.0 to 7.3 as outputs 
+			// Initialise A 1ms Interrupt On GPT1 */
+DP7 |= 0x0F;		// initialise port 7.0 to 7.3 as outputs 
 T2CON 	= 0x27 ;
 T3CON 	= 0x0007 ;
 T3UD 	= 1 ;                
-T3 = T2 = 2500;			// 2500  is 1 second I think ???
-T3IC 	= 0x04 ;   		// Timer 3 interrupt is priority 1
-T3IE 	= 1    ;   		// Enable Timer 3 interrupt                                   
-T3R 	= 0 ;   		// Disable Global Interrupts until ready to service IRQ 
-IEN 	= 1 ;   		// May be required for debugger
+T3 = T2 = 2500;		// 2500  is 1 second I think ???
+T3IC 	= 0x04 ;   	// Timer 3 interrupt is priority 1
+T3IE 	= 1    ;   	// Enable Timer 3 interrupt                                   
+T3R 	= 0 ;   	// Disable Global Interrupts until ready to service IRQ 
+IEN 	= 1 ;   	// May be required for debugger
 }
    
 
@@ -235,15 +227,15 @@ if (_logging==1)
 void user_menu(void)
 {
 puts(	"\nC167 monitor and setup options\n"
-		"1. Read ADC values on RGB ports.\n"
-		"2. Set flash memory base address.\n"
-		"3. Erase flash memory block at 0x8000H.\n"
-		"4. Write flash data to 0x8000H.\n"
-		"5. Read flash address 0x8000H.\n"
-		"6. Display setup and hardware information.\n"   
-		"7. Dump memory address 0x8000H.\n"
-		"8. Read a line of text.\n"
-		"\n<ESC> for menu. \n<CR> to re-start data logging.\n");
+	"1. Read ADC values on RGB ports.\n"
+	"2. Set flash memory base address.\n"
+	"3. Erase flash memory block at 0x8000H.\n"
+	"4. Write flash data to 0x8000H.\n"
+	"5. Read flash address 0x8000H.\n"
+	"6. Display setup and hardware information.\n"   
+	"7. Dump memory address 0x8000H.\n"
+	"8. Read a line of text.\n"
+	"\n<ESC> for menu. \n<CR> to re-start data logging.\n");
 }
 
 
@@ -261,99 +253,102 @@ while(!strchr(_rx_byte, replies))
 	switch(_rx_byte)
 		{
 		case 0x31:	
-					puts("\nReading ADC ..."); 	
-					read_rgb_values(); 					
-					break;
+			puts("\nReading ADC ..."); 	
+			read_rgb_values(); 					
+			break;
 		case 0x32:	
-					puts("\nFlash base set to 0x8000H"); 	
-					setup_flash_base();
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\nFlash base set to 0x8000H"); 	
+			setup_flash_base();
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x33:	
-					puts("\nErasing flash memory.");  	
-					PFlash_Erase(0x8000);
-					prompt();
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\nErasing flash memory.");  	
+			PFlash_Erase(0x8000);
+			prompt();
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x34: 	
-					puts("\nWriting data descriptor string to flash:"); 
-					PFlash_Write(0x8000, fl_name);
-					prompt();
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\nWriting data descriptor string to flash:"); 
+			PFlash_Write(0x8000, fl_name);
+			prompt();
+			S0RBUF=0;	_rx_byte=0;	
+			break;
 		case 0x35:
-					puts(	"\nReading ident string\n"
-							"and data descriptor: ");
-					display_string(0x8000);
-					prompt();
-					S0RBUF=0;  _rx_byte=0;
-					break;
+			puts(	"\nReading ident string\n"
+				"and data descriptor: ");
+				display_string(0x8000);
+				prompt();
+				S0RBUF=0;  
+				_rx_byte=0;
+				break;
 		case 0x36: 	
-					puts("\nReading setup information."); 	 	
-					display_cs();	// show chip select info.
-					prompt();
-					S0RBUF=0;	_rx_byte=0;	
-					break;
+			puts("\nReading setup information."); 	 	
+				display_cs();	// show chip select info.
+				prompt();
+				S0RBUF=0;	
+				_rx_byte=0;	
+				break;
 		case 0x37:
-//					seg = get_address();
-					seg = 0x8000;
-					dump_memory(seg, offset);
-					offset+=64;
-					S0RBUF=0;	_rx_byte=0;
-					break;
+//				seg = get_address();
+				seg = 0x8000;
+				dump_memory(seg, offset);
+				offset+=64;
+				S0RBUF=0;	
+				_rx_byte=0;
+				break;
 		case 0x38:
-					puts("\nEnter data descriptor with date/time: ");
-					getline(line_buff, 20);
-					printf("Descriptor: %12s", line_buff);
-					S0RBUF=0;	_rx_byte=0;
-					break;
+				puts("\nEnter data descriptor with date/time: ");
+				getline(line_buff, 20);
+				printf("Descriptor: %12s", line_buff);
+				S0RBUF=0;	
+				_rx_byte=0;
+				break;
 
 		case ESCAPE:	
-					user_menu();
-					S0RBUF=0;   _rx_byte=0; 
-					T3R=0;		// disable interrupts on timer counter
-					break;
+				user_menu();
+				S0RBUF=0;   
+				_rx_byte=0; 
+				T3R=0;		// disable interrupts on timer counter
+				break;
 		case CR:
-					T3R=1;
-					puts("\nData logging started.");
-					return;
+				T3R=1;
+				puts("\nData logging started.");
+				return;
 		default: 		
-					S0RBUF=0; 
-					break;
+				S0RBUF=0; 
+				break;
 		}
 	}
 }
 
-
 void display_cs(void)
 {
 printf(	"\nChip Select Address MSB (RGSAD) and Block Sizes (RGSZ)\n"
-		"(RGSZ uses bits 0 - 3) 0000 = 4k, MUL by two per bit:\n"
-		"/CS1: 0x%04x /CS2: 0x%04x\n"
-	   	"/CS3: 0x%04x /CS4: 0x%04x\n", 
+	"(RGSZ uses bits 0 - 3) 0000 = 4k, MUL by two per bit:\n"
+	"/CS1: 0x%04x /CS2: 0x%04x\n"
+	"/CS3: 0x%04x /CS4: 0x%04x\n", 
 		ADDRSEL1, ADDRSEL2, ADDRSEL3, ADDRSEL4);
 printf(	"\nBus Control Registers: \n"
-		"BC0: 0x%04x BC1: 0x%04x BC2: 0x%04x\n" 
-		"BC3: 0x%04x BC4: 0x%04x\n", 
+	"BC0: 0x%04x BC1: 0x%04x BC2: 0x%04x\n" 
+	"BC3: 0x%04x BC4: 0x%04x\n", 
 		BUSCON0, BUSCON1, BUSCON2, BUSCON3, BUSCON4);
 printf(	"\nSystem control SYSCON: 0x%04x\n\n",
-		"<ESC> for menu or <6> to continue.\n", SYSCON);
+	"<ESC> for menu or <6> to continue.\n", SYSCON);
 }
 
 
 void setup_flash_base(void)
 {
 ADDRSEL3=0x0807;	// sets flash start address to 
-					// 0x8000 and block size 512K Byte
+			// 0x8000 and block size 512K Byte
 BUSCON3=0xFFC3;		// /CS dependant on /RD and /WR lines 
-					// wait states set with ALE lengthened
+			// wait states set with ALE lengthened
 prompt();
 }
 
-
 void main(void) 
 {
-initialise();			// set up serial port and timer status LED
+initialise();		// set up serial port and timer status LED
 display_message();
 timeout();
 
@@ -361,11 +356,13 @@ while(1)
 	{ 	
 	switch(_rx_byte)
 		{
-		case ESCAPE: _rx_byte=0; monitor(); 		break;
-		case CR:	 _rx_byte=0; display_message(); break;
-		default:	 break;
+		case ESCAPE: 	_rx_byte=0; monitor(); 		
+				break;
+		case CR:	_rx_byte=0; display_message(); 
+				break;
+		default:	break;
 		}	// reset byte received otherwise loop is endless
-    }
+    	}
 }
 
    
