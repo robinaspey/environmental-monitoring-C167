@@ -1,8 +1,5 @@
 # environmental-monitoring-C167
-Legacy code for Siemens C167 microcontroller board which was for the EU Transport futures project. 
-
-The Compiler used was KEIL Microvision 2. Assembler and Ansi C as well as binary files from the board OEM are included although only
-the ASM and C files were mine.
+Legacy code for Siemens C167 microcontroller board which was for the EU Transport futures project. The Compiler used was KEIL Microvision 2. Assembler and Ansi C as well as binary files from the board OEM are included although the ASM and C driver and main program files were for the project. The additional hardware for the board was a custom photodetector board which had gain increments of x10, x100 and x1000 under control of the C167 dependent on the signal level
 
 This code reads the ADC values for R,G,B channels from a photovolaic spectrometer which used the Mazet 3 channel photo diode with an OPA111 preamplifier from Burr Brown. The probe was used in the exhaust of a bus, and was also tested with various smoke sources
 to allow detection of particulates and particulat bursts during vehicle operation.
