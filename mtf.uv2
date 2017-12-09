@@ -1,7 +1,7 @@
 ### uVision2 Project, (C) Keil Software
 ### Do not modify !
 
-Target (sk167), 0x0002 // Tools: '166/167'
+Target (sk167), 0x0002     // Tools: '166/167'
 Target (sk167-rom), 0x0002 // Tools: '166/167'
 
 Group (Source Group 1)
