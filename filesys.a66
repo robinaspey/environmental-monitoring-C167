@@ -1,0 +1,51 @@
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+; FUNCTION write_flash_byte (BEGIN  RMASK = @0x0010)
+                                           ; SOURCE LINE # 5
+0000 8890          MOV       [-R0],R9
+0002 8880          MOV       [-R0],R8
+                                           ; SOURCE LINE # 7
+0004 E004          MOV       R4,#00H
+0006 B840          MOV       [R0],R4       ; seg
+                                           ; SOURCE LINE # 8
+0008 E004          MOV       R4,#00H
+000A C4400200      MOV       [R0+#02H],R4  ; offs
+                                           ; SOURCE LINE # 9
+000E A840          MOV       R4,[R0]       ; seg
+                                           ; SOURCE LINE # 10
+0010 0804          ADD       R0,#04H
+0012 DB00          RETS      
+             ; FUNCTION write_flash_byte (END    RMASK = @0x0010)
+
+             ; FUNCTION init_flash (BEGIN  RMASK = @0x0010)
+                                           ; SOURCE LINE # 12
+0014 8890          MOV       [-R0],R9
+0016 8880          MOV       [-R0],R8
+                                           ; SOURCE LINE # 14
+0018 E004          MOV       R4,#00H
+001A B840          MOV       [R0],R4       ; seg
+                                           ; SOURCE LINE # 15
+001C E004          MOV       R4,#00H
+001E C4400200      MOV       [R0+#02H],R4  ; offs
+                                           ; SOURCE LINE # 16
+0022 D4400200      MOV       R4,[R0+#02H]  ; offs
+                                           ; SOURCE LINE # 17
+0026 0804          ADD       R0,#04H
+0028 DB00          RETS      
+             ; FUNCTION init_flash (END    RMASK = @0x0010)
+
+             ; FUNCTION read_address (BEGIN  RMASK = @0x0010)
+                                           ; SOURCE LINE # 19
+002A 8890          MOV       [-R0],R9
+002C 8880          MOV       [-R0],R8
+                                           ; SOURCE LINE # 21
+002E E004          MOV       R4,#00H
+0030 B840          MOV       [R0],R4       ; seg
+                                           ; SOURCE LINE # 22
+0032 E004          MOV       R4,#00H
+0034 C4400200      MOV       [R0+#02H],R4  ; offs
+                                           ; SOURCE LINE # 23
+                                           ; SOURCE LINE # 24
+0038 0804          ADD       R0,#04H
+003A DB00          RETS      
+; FUNCTION read_address (END    RMASK = @0x0010)
+

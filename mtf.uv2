@@ -1,0 +1,354 @@
+### uVision2 Project, (C) Keil Software
+### Do not modify !
+
+Target (sk167), 0x0002 // Tools: '166/167'
+Target (sk167-rom), 0x0002 // Tools: '166/167'
+
+Group (Source Group 1)
+Group (config)
+
+File 1,1,<.\FILESYS.C><FILESYS.C>
+File 1,2,<.\PF.a66><PF.a66>
+File 1,1,<.\MTF4.c><MTF4.c>
+File 2,2,<.\Start167.a66><Start167.a66>
+File 2,2,<.\Eva16cr.a66><Eva16cr.a66>
+File 2,2,<.\sk167r.a66><sk167r.a66>
+
+
+Options 1,0,0  // Target 'sk167'
+ Device (C167CR-LM)
+ Vendor (Siemens)
+ Cpu (IRAM (0xF600 - 0xFDFF) XRAM(0xE000-0xE7FF) ICAN(0xE800-0xEFFF) CLOCK(20000000) MOD167)
+ Rgf ()
+ Mem ()
+ C ()
+ A ()
+ RL ()
+ OH ()
+ UseEnv=0
+ EnvBin ()
+ EnvInc ()
+ EnvLib ()
+ EnvReg ()
+ OrgReg ()
+ TgStat=0
+ OutDir (.\)
+ OutName (sk167)
+ GenApp=1
+ GenLib=0
+ GenHex=1
+ Debug=0
+ Browse=0
+ LstDir (.\)
+ RunUsr 0 1 <\hitex167\symprep\sp166kl sk167 -v -o\hitex167\symprep\167cr.ctl>
+ RunUsr 1 0 <>
+ Model=6
+ RTOS=0
+ nHold=6
+ iHold=65535
+ sHold=65535
+ bHold=65535
+ MOD167=1
+ UseOnChipRom=0
+ UseOnchipXCAN=1
+ UseOnchipXRAM2=0
+ NearRam=0
+ NearRom=0
+ ExtMem 0 1,8192,8192
+ ExtMem 1 0,16384,8192
+ ExtMem 2 0,0,0
+ ExtMem 3 0,0,0
+ ExtMem 4 0,0,0
+ ExtMem 5 0,0,0
+ Optimize=6
+ SpeedSize=1
+ RegColor=0
+ Static=0
+ WarningLev=2
+ Alias=1
+ Order=0
+ UnsignedChar=0
+ NoDppSave=1
+ Float64=0
+ SaveUsr=0
+ cMisc (MOD167)
+ Define ()
+ Undefine ()
+ INCC6 ()
+ MPL=1
+ CASE=0
+ aMisc (MOD167)
+ aSet ()
+ aReset ()
+ INCA6 ()
+ IncBld=1
+ AlwaysBuild=0
+ GenAsm=0
+ AsmAsm=0
+ PublicsOnly=0
+ StopCode=3
+ CustArgs ()
+ LibMods ()
+ useLinkFile=0
+ LnkFile ()
+ LinkOnly=0
+ UseTargSet=1
+ DppUse=0
+ nDataSel=2
+ nConstSel=1
+ NearDataStr (20000)
+ NearConstStr ()
+ CinitTab (0x002000 - 0x003FFF)
+ IntVectAddr ()
+ lWarnLev=2
+ lDisWarn ()
+ lAssign ()
+ lRegbank ()
+ lReserve (8H-0BH,0ACH-0AFH,0B8H-0BBH)
+ lMisc ()
+ lClasses ()
+ lSect ()
+  OPTDL (S166.DLL)()(D167.DLL)(-p167CR)(S166.DLL)()(T167.DLL)(-p167CR)
+  OPTDBG 1666,0,()()()()()()()()()() ()()()()
+EndOpt
+
+Options 2,0,0  // Target 'sk167-rom'
+ Device (C167CR-LM)
+ Vendor (Siemens)
+ Cpu (IRAM (0xF600 - 0xFDFF) XRAM(0xE000-0xE7FF) ICAN(0xE800-0xEFFF) CLOCK(20000000) MOD167)
+ Rgf ()
+ Mem ()
+ C ()
+ A ()
+ RL ()
+ OH ()
+ UseEnv=0
+ EnvBin (C:\Keil\C166\BIN\)
+ EnvInc (C:\Keil\C166\INC\)
+ EnvLib (C:\Keil\C166\LIB\)
+ EnvReg ()
+ OrgReg ()
+ TgStat=0
+ OutDir (.\)
+ OutName (sk167r)
+ GenApp=1
+ GenLib=0
+ GenHex=1
+ Debug=1
+ Browse=1
+ LstDir (.\)
+ RunUsr 0 1 <\hitex167\symprep\sp166kl sk167r -v -o\hitex167\symprep\167cr.ctl>
+ RunUsr 1 1 <sk167r.bat 1>
+ Model=6
+ RTOS=0
+ nHold=6
+ iHold=65535
+ sHold=65535
+ bHold=65535
+ MOD167=1
+ UseOnChipRom=0
+ UseOnchipXCAN=1
+ UseOnchipXRAM2=0
+ NearRam=0
+ NearRom=0
+ ExtMem 0 1,512,56320
+ ExtMem 1 0,262144,65536
+ ExtMem 2 0,0,0
+ ExtMem 3 0,0,0
+ ExtMem 4 0,0,0
+ ExtMem 5 0,0,0
+ Optimize=6
+ SpeedSize=0
+ RegColor=0
+ Static=0
+ WarningLev=2
+ Alias=1
+ Order=0
+ UnsignedChar=0
+ NoDppSave=1
+ Float64=0
+ SaveUsr=0
+ cMisc (MOD167)
+ Define (_LEDS_P2_)
+ Undefine ()
+ INCC6 ()
+ MPL=1
+ CASE=0
+ aMisc (MOD167)
+ aSet (SK167=00001H)
+ aReset ()
+ INCA6 ()
+ IncBld=1
+ AlwaysBuild=0
+ GenAsm=0
+ AsmAsm=0
+ PublicsOnly=0
+ StopCode=3
+ CustArgs ()
+ LibMods ()
+ useLinkFile=0
+ LnkFile ()
+ LinkOnly=0
+ UseTargSet=1
+ DppUse=0
+ nDataSel=2
+ nConstSel=1
+ NearDataStr ()
+ NearConstStr ()
+ CinitTab (0x000200 - 0x00DDFF)
+ IntVectAddr ()
+ lWarnLev=2
+ lDisWarn ()
+ lAssign ()
+ lRegbank ()
+ lReserve ()
+ lMisc ()
+ lClasses ()
+ lSect ()
+  OPTDL (S166.DLL)()(D167.DLL)(-p167CR)(S166.DLL)()(T167.DLL)(-p167CR)
+  OPTDBG 133,0,()()()()()()()()()() ()()()()
+EndOpt
+
+Options 2,2,0  // Group 'config'
+ IncBld=0
+ AlwaysBuild=0
+ GenAsm=0
+ AsmAsm=0
+ PublicsOnly=0
+ StopCode=3
+ CustArgs ()
+ LibMods ()
+ Optimize=8
+ SpeedSize=2
+ RegColor=2
+ Static=2
+ WarningLev=4
+ Alias=2
+ Order=2
+ UnsignedChar=2
+ NoDppSave=2
+ Float64=2
+ SaveUsr=2
+ cMisc ()
+ Define ()
+ Undefine ()
+ INCC6 ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+
+Options 1,1,1  // File 'FILESYS.C'
+ IncBld=2
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ Optimize=8
+ SpeedSize=2
+ RegColor=2
+ Static=2
+ WarningLev=4
+ Alias=2
+ Order=2
+ UnsignedChar=2
+ NoDppSave=2
+ Float64=2
+ SaveUsr=2
+ cMisc (MOD167)
+ Define (SRC)
+ Undefine ()
+ INCC6 ()
+EndOpt
+
+Options 1,2,4  // File 'Start167.a66'
+ IncBld=1
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+
+Options 1,2,5  // File 'Eva16cr.a66'
+ IncBld=0
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+
+Options 1,2,6  // File 'sk167r.a66'
+ IncBld=0
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+
+Options 2,2,5  // File 'Eva16cr.a66'
+ IncBld=0
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+
+Options 2,2,6  // File 'sk167r.a66'
+ IncBld=1
+ AlwaysBuild=2
+ GenAsm=2
+ AsmAsm=2
+ PublicsOnly=2
+ StopCode=11
+ CustArgs ()
+ LibMods ()
+ MPL=2
+ CASE=2
+ aMisc ()
+ aSet ()
+ aReset ()
+ INCA6 ()
+EndOpt
+

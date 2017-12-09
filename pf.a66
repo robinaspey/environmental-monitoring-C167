@@ -1,0 +1,121 @@
+$SEGMENTED CASE MOD167
+;------------------------------------------------------------------------------
+;  Available Functions:
+;  PFlash_Write:  Write 64 Bytes to the PFlash area
+;  PFlash_Erase:  Erase Sector in the PFlash area
+;  PFlash_Reset:  Reset PFlash to read mode and clear status
+;------------------------------------------------------------------------------
+PUBLIC	PFlash_Write, PFlash_Erase, PFlash_Reset
+;
+?PR?PFLASH	SECTION	CODE	'FLASH_CODE'
+SetRegs		PROC	NEAR
+;
+; load address register required for indirect PFlash addressing 
+;
+		MOV	R1,#2		; Segment 2 is always present
+		MOV	R2,#05554H	; address 2:5554H for programming
+		MOV	R3,#0AAAAH	; address 2:AAAAH for programming
+		MOVBZ	R5,RH2		; R5 = 055H
+		MOVBZ	R6,RL3		; R6 = 0AAH
+		RET
+SetRegs		ENDP
+;------------------------------------------------------------------------------
+; int PFlash_Write (void huge *target_adr, void huge *buffer);
+;
+; PFlash_Write programs 64 Bytes from the buffer to the target_adr in the
+; PFlash area.
+; Parameters
+; target_adr  Pointer to the target address in the PFlash area
+; buffer      Pointer to the buffer which holds 32 Words
+; Return
+; 0           programming successful
+; status      status register (FSR) value of PFlash area
+;------------------------------------------------------------------------------
+; target_adr in R8/R9
+; buffer     in R10/R11
+; return val in R4
+PFlash_Write	PROC	FAR
+		CALL	SetRegs		; Set Registers to indirect addresses
+		MOV	R12,#0A0F2H	; address 2:A0F2H for load burst data
+		MOV	R4,#50H	
+		EXTS	R1,#1
+		MOV	[R3],R4		; Enter Burst Mode (1st cycle)
+		EXTS	R11,#1		; Get first data word from buffer
+		MOV	R4,[R10+]
+		EXTS	R9,#1
+		MOV	[R8],R4		; Write first data word to PFlash
+		MOV	R5,#29		; counter for next 30 data words
+write_loop:	EXTS	R11,#1
+		MOV	R4,[R10+]	; Get next data words (2..31)
+		EXTS	R1,#1
+		MOV	[R12],R4	; Write next data words to PFlash
+		CMPD1	R5,#0
+		JMP	CC_UGT,write_loop
+		MOV	R6,#0A0H	; Write Burst Command
+		EXTS	R1,#3
+		MOV	[R3],R6		; 1st command cycle
+		MOV	[R2],R5		; 2nd command cycle
+		MOV	[R3],R4		; 3rd command cycle
+		EXTS	R11,#1
+		MOV	R4,[R10+]	; Get last (32nd) data word
+		EXTS	R9,#1
+		MOV	[R8],R4		; write last data word to PFlash
+		AND 	R8,#0C000H	; generate segment address in R8
+write_wait:	MOV	R4,#0FAH	; Read PFlash status register (FSR)
+		EXTS	R1,#1
+		MOV	[R3],R4		; 1st command cycle
+		EXTS	R9,#1
+		MOV	R4,[R8]
+		JB	R4.0,write_wait	; Wait until busy released
+		RET
+PFlash_Write	ENDP
+;------------------------------------------------------------------------------
+; int PFlash_Erase (void huge *sector_adr);
+;
+; PFlash_Erase erases the sector addressed by sector_adr in the PFlash area.
+; Parameters
+;    sector_adr         Pointer to the sector in the PFlash area
+; Return
+;    status             status register (FSR) value of PFlash area
+;------------------------------------------------------------------------------
+; target_adr in R8/R9
+; return val in R4
+PFlash_Erase	PROC	FAR
+		CALL	SetRegs		; Set Registers
+		MOV	R4,#080H	; Command Byte
+		EXTS	R1,#4
+		MOV	[R3],R6		; 1st command cycle
+		MOV	[R2],R5		; 2nd command cycle
+		MOV	[R3],R4		; 3rd command cycle
+		MOV	[R2],R6		; 4th command cycle
+		EXTS	R1,#1
+		MOV	[R3],R5		; 5th command cycle
+		AND	R8,#0C000H
+		MOV	R4,#30H
+		EXTS	R9,#1
+		MOV	[R8],R4		; 6th command cycle
+erase_wait:	MOV	R4,#0FAH	; Read PFlash status register (FSR)
+		EXTS	R1,#1
+		MOV	[R3],R4		; 1st command cycle
+		EXTS	R9,#1
+		MOV	R4,[R8]
+		JB	R4.0,erase_wait	; Wait until busy released
+		RET
+PFlash_Erase	ENDP
+;------------------------------------------------------------------------------
+; void PFlash_Reset (void);
+;
+; Reset PFlash module to read mode and clear status register (FSR)
+;------------------------------------------------------------------------------
+PFlash_Reset	PROC	FAR
+; pre-load address register required for indirect PFlash addressing 
+		CALL	SetRegs		; Set Registers to indirect addresses
+		MOV	R4,#0F0H	; Command Bytes
+		MOV	R5,#0F5H
+		EXTS	R1,#2		;; Does this set DPP2 ?
+		MOV	[R3],R4		; Reset to Read
+		MOV	[R3],R5		; Clear Status
+		RET
+PFlash_Reset	ENDP
+?PR?PFLASH	ENDS
+		END
